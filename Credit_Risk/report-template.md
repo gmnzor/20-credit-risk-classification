@@ -1,27 +1,57 @@
 # Module 12 Report Template
+Nestor Gomez
 
 ## Overview of the Analysis
 
-In this section, describe the analysis you completed for the machine learning models used in this Challenge. This might include:
+For this analysis we used machine learning and a logistic regression model to analyze lending data to train a logistic regression model capable of predicting the creditworthiness of potential borrowers.
 
-* Explain the purpose of the analysis.
-* Explain what financial information the data was on, and what you needed to predict.
-* Provide basic information about the variables you were trying to predict (e.g., `value_counts`).
-* Describe the stages of the machine learning process you went through as part of this analysis.
-* Briefly touch on any methods you used (e.g., `LogisticRegression`, or any other algorithms).
+We utlized historical data from a peer-to-peer lending services which took into account various factors including loan size, interest rate, borrower income, open lines of credit, prior derogatory credit marks, and total outstanding debt, alongside a pre-existing classifier as to whether the loan ultimately defaulted or not.
+
+Our intent was to see if the information in this dataset could predict the healthy/default classifier consistently, which would then allow us to utilize the model to predict potential defaults when new customers apply for credit.
+
+To being we took in our data, and separated out the loan_status field which held our loan classifier, 0 being a healthy loan and 1 being a defaulted loan.
+
+These two datasets were split further, with 75% of data points being carved out to train the data and 25% being kept back for testing our model.
+
+We created a Logistic Regression model with the training dataset which looked to find trends between loan details and the customer's credit history and the eventual completion of the loan.
+
+Once the model was fit, we then provided it the testing data to see if the model could predict healthy vs defaulted loans.
+
+We then broke the results into four categories
+* True Positives (TP) - Healthy loans marked as healthy
+* False Positives (FP)- Defaulted loans marked as healthy
+* True Negatives (TN)- Defaulted loans marked as risky
+* False Negatives (FN)- Healthy loans marked as risky
+
+By tallying up these four endcases, we can score the model's effectiveness.
 
 ## Results
 
 Using bulleted lists, describe the accuracy scores and the precision and recall scores of all machine learning models.
 
-* Machine Learning Model 1:
-    * Description of Model 1 Accuracy, Precision, and Recall scores.
+* Logistic Regression Model:
+    * Accuracy  
+        * How many loans were predicted correctly
+        * 99% of test cases (19,238/19,384) were correctly predicted
+    * Precision  
+        * Of loans predicted to be healthy, how many were healthy, and vice versa
+        * True Positives / (True Postiives + False Positives)
+        * 99% of loans predicted as healthy loans were identified as healthy
+        * 94% of predicted defaulted loans were identified as risky
+        * Macro average - 97% of all cases were correctly predicted  
+    * Recall 
+        * Of healthy loans, how many were predicted healthy, and vice-versa
+        * True Positives / (True Postiives + False Negatives)
+        * Near 100% of all healthy accounts were predicted to be healthy
+        * 84% of defaulted accounts were predicted to be risky
+    
 
 ## Summary
 
-Summarize the results of the machine learning models, and include a recommendation on the model to use, if any. For example:
+Our logistics regression model overall has high marks, correctly predicting loan outcome on 99% of test cases. 
 
-* Which one seems to perform best? How do you know it performs best?
-* Does performance depend on the problem we are trying to solve? (For example, is it more important to predict the `1`'s, or predict the `0`'s? )
+In this use case, we are trying to determine likely default based on criteria at the time of application to avoid loss of intial investment. Of the one percent of cases that were misidentified, the largest cohort instance where we failed to identify a risky loan as risky, where we mislabeled 16% as healthy. 
 
-If you do not recommend any of the models, please justify your reasoning.
+While this can seem like a large margin of error, we must take into account that we had only 693 defaulted accoutns vs 18691 healthy. Our model had far more data on healthy accounts and was thus better able to identify those. 
+
+With this limitation in mind, awe come back to our weight avg scores of 99% across precision, recall, and f1-score and can be confident in this prelimiary model's predictive ability.
